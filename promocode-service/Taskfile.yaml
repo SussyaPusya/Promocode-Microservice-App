@@ -1,0 +1,42 @@
+version: '3'
+
+dotenv: [ '.env' ]
+
+vars:
+  PROTO_PATH: "./api/promo.proto"
+  PROTO_DIR: "api"
+  GEN_PATH: "./pkg/api/pb"
+  GOOGLE_API_PATH: "./third_party/googleapis"
+
+tasks:
+  generate-proto:
+    aliases:
+      - gen
+    desc: Generate gRPC Go code from protobuf
+    cmds:
+      - |
+        protoc \
+          -I {{.PROTO_DIR}} \
+          -I {{.GOOGLE_API_PATH}} \
+          {{.PROTO_PATH}} \
+          --go_out={{.GEN_PATH}} \
+          --go-grpc_out={{.GEN_PATH}} \
+          --go_opt=paths=source_relative \
+          --go-grpc_opt=paths=source_relative \
+          --grpc-gateway_out={{.GEN_PATH}} \
+          --grpc-gateway_opt=paths=source_relative
+
+  migrate:
+    desc: "Run golang-migrate commands using params from env"
+    cmds:
+      - echo $DATABASE_URL $MIGRATIONS_PATH
+      - migrate -database "postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}?sslmode=disable" -source "file://"$MIGRATIONS_PATH {{.CLI_ARGS}}
+    silent: false
+  test:
+    desc: Run tests with coverage, excluding certain folders
+    cmds:
+      - |
+        go test $(go list ./... | grep -v '/pkg/api/pb') \
+          -coverprofile=coverage.out
+      - |
+        go tool cover -func=coverage.out | tee /dev/tty | tail -n1 | awk '{print "✅ Total coverage:", $3}'

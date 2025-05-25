@@ -1,0 +1,141 @@
+syntax = "proto3";
+option go_package = "pkg/api/promopb";
+package api;
+
+import "google/protobuf/timestamp.proto";
+
+
+service PromoService {
+  rpc CreatePromo(CreatePromoRequest) returns (CreatePromoResponse) {}
+  rpc ListPromo(ListPromoRequest) returns (ListPromoResponse){}
+  rpc GetPromo(GetPromoRequest) returns (GetPromoResponse) {}
+  rpc UpdatePromo(UpdatePromoRequest) returns (UpdatePromoResponse) {}
+  rpc DeletePromo(DeletePromoRequest) returns (DeletePromoResponse) {}
+  rpc ActivatePromo(ActivatePromoRequest) returns (ActivatePromoResponse) {}
+  rpc PromoPing(PromoPingRequest) returns (PromoPingResponse) {}
+
+}
+
+message PromoPingRequest {
+
+}
+
+message PromoPingResponse {
+  bool ok = 1;
+}
+
+message CreatePromoRequest {
+  Mode mode = 1;
+  optional string company_id = 2;
+  optional string promo_common = 3;
+  repeated string promo_unique = 4;
+  string description = 5;
+  optional string image_url = 6;
+  Target target = 7;
+  int64 max_count = 8;
+  google.protobuf.Timestamp active_from = 9;
+  google.protobuf.Timestamp active_until = 10;
+}
+
+message CreatePromoResponse {
+  string id = 1;
+}
+
+message ListPromoRequest {
+  optional string company_id = 1;
+  optional int64 limit = 2;
+  optional int64 offset = 3;
+  optional PromoSortBy sort_by = 4;
+  repeated string countries = 5;
+}
+
+message ListPromoResponse {
+  int64 x_total_count = 1;
+  repeated Promo promo = 2;
+}
+
+message GetPromoRequest {
+  optional string company_id = 1;
+  string promo_id = 2;
+}
+
+message GetPromoResponse {
+  Promo promo = 1;
+}
+
+message UpdatePromoRequest {
+  optional string company_id = 1;
+  string promo_id = 2;
+  string description = 3;
+  string image_url = 4;
+  Target target = 5;
+  int64 max_count = 6;
+  google.protobuf.Timestamp active_from = 7;
+  google.protobuf.Timestamp active_until = 8;
+}
+
+message UpdatePromoResponse {
+
+}
+
+message DeletePromoRequest {
+  optional string company_id = 1;
+
+  string promo_id = 2;
+}
+
+message DeletePromoResponse {
+
+}
+
+message ActivatePromoRequest {
+  string promo_id = 1;
+}
+
+message ActivatePromoResponse {
+  string code = 1;
+  bool success_activation = 2;
+  Reason reason = 3;
+}
+
+message Target {
+  optional int64 age_from = 1;
+  optional int64 age_until = 2;
+  optional string country = 3;
+  repeated string categories = 4;
+}
+
+message Promo {
+  string promo_id = 1;
+  string company_id = 2;
+  string company_name = 3;
+  Mode mode = 4;
+  repeated PromoCode codes = 5;
+  string description = 6;
+  optional string image_url = 7;
+  Target target = 8;
+  optional google.protobuf.Timestamp active_from = 9;
+  optional google.protobuf.Timestamp active_until = 10;
+}
+
+message PromoCode {
+  string code = 1;
+  int64 activations = 2;
+  int64 max_count = 3;
+}
+
+enum Mode {
+  COMMON = 0;
+  UNIQUE = 1;
+}
+
+enum PromoSortBy {
+  ACTIVE_FROM = 0;
+  ACTIVE_UNTIL = 1;
+}
+
+enum Reason {
+  OK = 0;
+  ANTIFRAUD = 1;
+  NO_ACTIVATIONS_LEFT = 2;
+}

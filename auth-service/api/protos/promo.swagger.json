@@ -1,0 +1,213 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "api/protos/promo.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "PromoService"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {},
+  "definitions": {
+    "apiActivatePromoResponse": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "successActivation": {
+          "type": "boolean"
+        },
+        "reason": {
+          "$ref": "#/definitions/apiReason"
+        }
+      }
+    },
+    "apiCreatePromoResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      }
+    },
+    "apiDeletePromoResponse": {
+      "type": "object"
+    },
+    "apiGetPromoResponse": {
+      "type": "object",
+      "properties": {
+        "promo": {
+          "$ref": "#/definitions/apiPromo"
+        }
+      }
+    },
+    "apiListPromoResponse": {
+      "type": "object",
+      "properties": {
+        "xTotalCount": {
+          "type": "string",
+          "format": "int64"
+        },
+        "promo": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/apiPromo"
+          }
+        }
+      }
+    },
+    "apiMode": {
+      "type": "string",
+      "enum": [
+        "COMMON",
+        "UNIQUE"
+      ],
+      "default": "COMMON"
+    },
+    "apiPromo": {
+      "type": "object",
+      "properties": {
+        "promoId": {
+          "type": "string"
+        },
+        "companyId": {
+          "type": "string"
+        },
+        "companyName": {
+          "type": "string"
+        },
+        "mode": {
+          "$ref": "#/definitions/apiMode"
+        },
+        "codes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/apiPromoCode"
+          }
+        },
+        "description": {
+          "type": "string"
+        },
+        "imageUrl": {
+          "type": "string"
+        },
+        "target": {
+          "$ref": "#/definitions/apiTarget"
+        },
+        "activeFrom": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "activeUntil": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "apiPromoCode": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "activations": {
+          "type": "string",
+          "format": "int64"
+        },
+        "maxCount": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "apiPromoPingResponse": {
+      "type": "object",
+      "properties": {
+        "ok": {
+          "type": "boolean"
+        }
+      }
+    },
+    "apiPromoSortBy": {
+      "type": "string",
+      "enum": [
+        "ACTIVE_FROM",
+        "ACTIVE_UNTIL"
+      ],
+      "default": "ACTIVE_FROM"
+    },
+    "apiReason": {
+      "type": "string",
+      "enum": [
+        "OK",
+        "ANTIFRAUD",
+        "NO_ACTIVATIONS_LEFT"
+      ],
+      "default": "OK"
+    },
+    "apiTarget": {
+      "type": "object",
+      "properties": {
+        "ageFrom": {
+          "type": "string",
+          "format": "int64"
+        },
+        "ageUntil": {
+          "type": "string",
+          "format": "int64"
+        },
+        "country": {
+          "type": "string"
+        },
+        "categories": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "apiUpdatePromoResponse": {
+      "type": "object"
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    }
+  }
+}

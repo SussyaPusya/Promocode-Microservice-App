@@ -1,0 +1,31 @@
+stages: 
+  - test
+
+
+test:
+  stage: test
+
+  image: golang
+
+
+
+
+
+  script:
+    - go test $(go list ./... | grep -vE '/(gateway|cmd|pkg)') -coverprofile=coverage.out 
+    - go tool cover -func=coverage.out | tee coverage.txt
+    - |
+      COVERAGE=$(go tool cover -func=coverage.out | grep total: | awk '{print int($3)}')
+      echo "Coverage is ${COVERAGE}%"
+
+      if [ "$COVERAGE" -lt 30 ]; then
+        echo "Coverage is too low!"
+        exit 1
+      fi
+
+
+
+
+
+#go test ./... -coverprofile=coverage.out  
+#go tool cover -func=coverage  
