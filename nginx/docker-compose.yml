@@ -1,0 +1,16 @@
+version: '3.5'
+
+services:
+  nginx:
+    image: nginx:latest
+    container_name: nginx-proxy
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    
+
+networks:
+  default:
+    external:
+      name: shared-net

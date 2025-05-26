@@ -6,7 +6,6 @@ toolchain go1.24.2
 
 require (
 	github.com/go-playground/validator/v10 v10.26.0
-	github.com/golang-migrate/migrate v3.5.4+incompatible
 	github.com/golang-migrate/migrate/v4 v4.18.3
 	github.com/google/uuid v1.6.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.26.3
