@@ -17,6 +17,9 @@
 - **README.md** — описание проекта  
 - **LICENSE** — лицензия MIT  
 
+
+### Api запросов лежит в [swag](https://github.com/SussyaPusya/Promocode-Microservice-App/tree/main/api/api_endpoints_swag.yml)
+
 ## 🚀 Быстрый старт
 
 ### Требования
